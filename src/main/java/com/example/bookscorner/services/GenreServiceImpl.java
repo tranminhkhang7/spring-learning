@@ -36,7 +36,6 @@ public class GenreServiceImpl implements GenreService{
     }
 
     public void updateGenre(int genreId, Genre genre) {
-//        genreRepository.save(genre);
         boolean exists = genreRepository.existsById(genreId);
         if (!exists) {
             throw new IllegalStateException("The genre you want to update does not exist");
@@ -44,9 +43,7 @@ public class GenreServiceImpl implements GenreService{
 
         Genre genreOld = genreRepository.findById(genreId).get();
 
-        System.out.println(genreOld);
         genreOld.setGenreName(genre.getGenreName());
-        System.out.println(genreOld);
 
         genreRepository.save(genreOld);
     }

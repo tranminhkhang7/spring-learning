@@ -60,6 +60,9 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<BookGenre> bookGenres;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookAuthor> bookAuthors;
 }
 //viết unitest thì viết cho service và controller
 //nếu ko đủ thời gian thì có thể viết một vài service và controller tiêu biểu

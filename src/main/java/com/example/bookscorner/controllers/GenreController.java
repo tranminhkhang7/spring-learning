@@ -29,10 +29,9 @@ public class GenreController {
 
     @PutMapping(path = "{genreId}")
     void updateGenre(@PathVariable("genreId") int genreId, @RequestBody Genre genre) {
-        System.out.println("helloupdate");
         genreService.updateGenre(genreId, genre);
     }
-
+ 
     @DeleteMapping(path = "{genreId}")
     void deleteGenre(@PathVariable("genreId") int genreId){
         genreService.deleteGenre(genreId);

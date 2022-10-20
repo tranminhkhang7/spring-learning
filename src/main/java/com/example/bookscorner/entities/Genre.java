@@ -31,9 +31,10 @@ public class Genre {
     @Column(name = "genre_name", length = 55)
     private String genreName;
 
-
     @OneToMany(mappedBy = "genre")
     private List<BookGenre> bookGenres;
+
+
 
     public Genre(String genreName) {
         this.genreName = genreName;
