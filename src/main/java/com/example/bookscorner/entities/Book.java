@@ -43,18 +43,23 @@ public class Book {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "avg_rate")
-    private double avgRate;
+    @Column(name = "average_rate")
+    private double averageRate;
 
-    @Column(name = "cnt_rate")
-    private int cntRate;
+    @Column(name = "count_rate")
+    private int countRate;
 
     @Column(name = "quantity_left")
     private int quantityLeft;
 
     @OneToMany(mappedBy = "book")
-    private List<Cart> cart; //xoá private nếu bug
+    private List<Cart> cart;
 
     @OneToMany(mappedBy = "book")
-    private List<OrderDetail> orderDetails; //xoá private nếu bug
+    private List<OrderDetail> orderDetails;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookGenre> bookGenres;
 }
+//viết unitest thì viết cho service và controller
+//nếu ko đủ thời gian thì có thể viết một vài service và controller tiêu biểu

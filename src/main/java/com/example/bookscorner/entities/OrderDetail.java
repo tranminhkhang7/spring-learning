@@ -27,11 +27,11 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order; // bỏ private nếu gặp lỗi
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book book; //bỏ private nếu gặp lỗi
+    private Book book;
 
     @Column(name = "quantity")
     private int quantity;
