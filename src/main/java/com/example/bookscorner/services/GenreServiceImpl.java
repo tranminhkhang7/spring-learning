@@ -1,5 +1,6 @@
 package com.example.bookscorner.services;
 
+import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,14 @@ public class GenreServiceImpl implements GenreService{
              throw new IllegalStateException("The genre does not  exist");
         }
         genreRepository.deleteById(genreId);
+    }
+
+    public List<Book> getAllBooksByGenre(int genreId) {
+        boolean exists = genreRepository.existsById(genreId);
+        if (!exists) {
+            throw new IllegalStateException("The genre does not  exist");
+        }
+//        Genre genre = genreRepository.findById(genreId).get();
+        return genreRepository.getAllBooksByGenre(genreId);
     }
 }
