@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookResponseDto> searchBooks(String query, List<String> genre) {
-        if (genre == null) return null;
+        if (genre == null || query == null) return null;
         List<Integer> newList = new ArrayList<>();
         for(String s : genre) {
             try {

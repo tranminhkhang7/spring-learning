@@ -38,7 +38,7 @@ public class Customer {
     @Column(name = "birthday")
     private Date birthday;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<Cart> cart;
 
     @OneToMany(mappedBy = "customer")

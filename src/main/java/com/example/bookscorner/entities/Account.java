@@ -32,7 +32,7 @@ public class Account {
     @Column(length = 55)
     private String password;
 
-    @OneToOne(mappedBy = "mAccount", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "mAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private Customer customer;
 }
