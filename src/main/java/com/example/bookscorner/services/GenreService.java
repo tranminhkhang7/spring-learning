@@ -1,5 +1,6 @@
 package com.example.bookscorner.services;
 
+import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,5 @@ public interface GenreService {
     public void addNewGenre(Genre genre);
     public void deleteGenre(int genreId);
     public void updateGenre(int genreId, Genre genre);
-    public List<Book> getAllBooksByGenre(int genreId);
+    public List<BookResponseDto> getAllBooksByGenre(int genreId);
 }

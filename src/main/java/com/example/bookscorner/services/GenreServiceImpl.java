@@ -1,22 +1,29 @@
 package com.example.bookscorner.services;
 
+import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.repositories.GenreRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GenreServiceImpl implements GenreService{
-    private final GenreRepository genreRepository;
-
+    // edit this if there's a bug
     @Autowired
-    public GenreServiceImpl(GenreRepository genreRepository) {
+    private final GenreRepository genreRepository;
+    @Autowired
+    private final ModelMapper mapper;
+//    @Autowired
+    public GenreServiceImpl(GenreRepository genreRepository, ModelMapper mapper) {
         super();
         this.genreRepository = genreRepository;
+        this.mapper = mapper;
     }
 
     public List<Genre> getGenres() {
@@ -57,12 +64,18 @@ public class GenreServiceImpl implements GenreService{
         genreRepository.deleteById(genreId);
     }
 
-    public List<Book> getAllBooksByGenre(int genreId) {
+    public List<BookResponseDto> getAllBooksByGenre(int genreId) {
         boolean exists = genreRepository.existsById(genreId);
         if (!exists) {
-            throw new IllegalStateException("The genre does not  exist");
+            throw new IllegalStateException("The genre does not exist");
         }
-//        Genre genre = genreRepository.findById(genreId).get();
-        return genreRepository.getAllBooksByGenre(genreId);
+        List<Book> bookEntitiesByGenre = genreRepository.getAllBooksByGenre(genreId);
+        List<BookResponseDto> bookDtoByGenre = new ArrayList<>();
+
+        for (Book bookEntity: bookEntitiesByGenre) {
+            BookResponseDto bookResponseDto = mapper.map(bookEntity, BookResponseDto.class);
+            bookDtoByGenre.add(bookResponseDto);
+        }
+        return bookDtoByGenre;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.bookscorner.controllers;
 
+import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.services.BookService;
@@ -21,6 +22,14 @@ public class BookController {
     @GetMapping(path = "all")
     List<Book> getBooks() {
         return bookService.getBooks();
+    }
+
+    @GetMapping
+    List<BookResponseDto> searchBooks(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) List<String> genre
+    ) {
+        return bookService.searchBooks(query, genre);
     }
 
     @PostMapping

@@ -1,20 +1,26 @@
 package com.example.bookscorner.services;
 
+import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
-import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.repositories.BookRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private final BookRepository bookRepository;
-
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
+    private final BookRepository bookRepository;
+    @Autowired
+    private final ModelMapper mapper;
+
+    public BookServiceImpl(BookRepository bookRepository, ModelMapper mapper) {
         this.bookRepository = bookRepository;
+        this.mapper = mapper;
     }
 
     public List<Book> getBooks() {
@@ -61,5 +67,30 @@ public class BookServiceImpl implements BookService {
 
         bookRepository.save(bookOld);
         return bookOld;
+    }
+
+    public List<BookResponseDto> searchBooks(String query, List<String> genre) {
+        if (genre == null) return null;
+        List<Integer> newList = new ArrayList<>();
+        for(String s : genre) {
+            try {
+                newList.add(Integer.valueOf(s));
+            } catch (NumberFormatException e){
+                System.out.println(e + " Parse a alphabet string to a number gets error.");
+            }
+        }
+
+        List<Book> listBooks = bookRepository.searchBooks(query, newList);
+
+        List<BookResponseDto> listBooksDto = new ArrayList<>();
+
+        for (Book bookEntity: listBooks) {
+            BookResponseDto bookResponseDto = mapper.map(bookEntity, BookResponseDto.class);
+            listBooksDto.add(bookResponseDto);
+        }
+
+        System.out.println(listBooksDto);
+
+        return listBooksDto;
     }
 }

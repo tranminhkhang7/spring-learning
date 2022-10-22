@@ -1,5 +1,6 @@
 package com.example.bookscorner.controllers;
 
+import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.services.GenreService;
@@ -24,7 +25,7 @@ public class GenreController {
     }
 
     @GetMapping("/{genreId}")
-    List<Book> getAllBooksByGenre(@PathVariable("genreId") int genreId) {
+    List<BookResponseDto> getAllBooksByGenre(@PathVariable("genreId") int genreId) {
         return genreService.getAllBooksByGenre(genreId);
     }
 
