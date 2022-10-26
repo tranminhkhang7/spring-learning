@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface BookService {
 
-    public List<Book> getBooks();
+    public List<BookResponseDto> getBooks();
 
-    public void addNewBook(Book book);
+    public BookResponseDto addNewBook(Book book);
 
-    public Book updateBook(Book book);
+    public BookResponseDto updateBook(Book book);
 
-    public Book deleteBook(Book book);
+    public BookResponseDto deleteBook(Book book);
 
     public List<BookResponseDto> searchBooks(String query, List<String> genre);
 }

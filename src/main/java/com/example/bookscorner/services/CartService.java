@@ -1,12 +1,11 @@
 package com.example.bookscorner.services;
 
-import com.example.bookscorner.dto.response.CartDto;
-import com.example.bookscorner.entities.Cart;
+import com.example.bookscorner.dto.request.CartRequestDto;
 
 import java.util.List;
 
 public interface CartService {
-    List<CartDto> getBooksInCart();
+    List<com.example.bookscorner.dto.response.CartResponseDto> getBooksInCart();
 
-//    List<Cart> getBooksInCart();
+    com.example.bookscorner.dto.response.CartResponseDto updateABookInCart(CartRequestDto cartRequestDto);
 }

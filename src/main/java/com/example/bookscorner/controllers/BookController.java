@@ -19,8 +19,8 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping(path = "all")
-    List<Book> getBooks() {
+    @GetMapping("/all") //to replace
+    List<BookResponseDto> getBooks() {
         return bookService.getBooks();
     }
 
@@ -33,17 +33,17 @@ public class BookController {
     }
 
     @PostMapping
-    void addNewBook(@RequestBody Book book) {
-        bookService.addNewBook(book);
+    BookResponseDto addNewBook(@RequestBody Book book) {
+        return bookService.addNewBook(book);
     }
 
     @PutMapping
-    void updateBook(@RequestBody Book book) {
-        bookService.updateBook(book);
+    BookResponseDto updateBook(@RequestBody Book book) {
+        return bookService.updateBook(book);
     }
 
     @DeleteMapping
-    void deletaBook(@RequestBody Book book) {
-        bookService.deleteBook(book);
+    BookResponseDto deleteBook(@RequestBody Book book) {
+        return bookService.deleteBook(book);
     }
 }

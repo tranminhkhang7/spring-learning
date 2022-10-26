@@ -23,19 +23,30 @@ public class BookServiceImpl implements BookService {
         this.mapper = mapper;
     }
 
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public List<BookResponseDto> getBooks() {
+        List<Book> bookList = bookRepository.findAll();
+
+        List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
+        for (Book book: bookList) {
+            BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
+            bookResponseDtoList.add(bookResponseDto);
+        }
+
+        return bookResponseDtoList;
     }
 
-    public void addNewBook(Book book) {
+    public BookResponseDto addNewBook(Book book) {
         boolean exists = bookRepository.existsById(book.getBookId());
         if (exists) {
             throw new IllegalStateException("The book is existing");
         }
         bookRepository.save(book);
+
+        BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
+        return bookResponseDto;
     }
 
-    public Book updateBook(Book book) {
+    public BookResponseDto updateBook(Book book) {
 //        System.out.println("hellothere" + book.getBookId());
         boolean exists = bookRepository.existsById(book.getBookId());
         if (!exists) {
@@ -52,10 +63,12 @@ public class BookServiceImpl implements BookService {
         bookOld.setQuantityLeft(book.getQuantityLeft());
 
         bookRepository.save(bookOld);
-        return bookOld;
+
+        BookResponseDto bookResponseDto = mapper.map(bookOld, BookResponseDto.class);
+        return bookResponseDto;
     }
 
-    public Book deleteBook(Book book) {
+    public BookResponseDto deleteBook(Book book) {
         boolean exists = bookRepository.existsById(book.getBookId());
         if (!exists) {
             throw new IllegalStateException("The book you want to delete does not exist");
@@ -66,7 +79,8 @@ public class BookServiceImpl implements BookService {
         bookOld.setStatus("disabled");
 
         bookRepository.save(bookOld);
-        return bookOld;
+        BookResponseDto bookResponseDto = mapper.map(bookOld, BookResponseDto.class);
+        return bookResponseDto;
     }
 
     public List<BookResponseDto> searchBooks(String query, List<String> genre) {

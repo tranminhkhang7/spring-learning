@@ -21,4 +21,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "AND bg.genre.genreId IN ?2")
     List<Book> searchBooks(String query, List<Integer> genre);
 
+    public Book findBookByBookId(int bookId);
+
 }

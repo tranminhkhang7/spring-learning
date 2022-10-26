@@ -1,4 +1,4 @@
-package com.example.bookscorner.dto.response;
+package com.example.bookscorner.dto.request;
 
 import lombok.*;
 
@@ -7,8 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CartDto {
-    public int cartId;
+public class CartRequestDto {
     public int customerId;
     public int bookId;
     public int quantity;

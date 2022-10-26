@@ -1,7 +1,6 @@
 package com.example.bookscorner.entities;
 
-import com.example.bookscorner.dto.response.CartDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.bookscorner.dto.response.CartResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,25 +39,25 @@ public class Cart {
     @Column(name = "quantity")
     int quantity;
 
-    public static CartDto toCartDto(Cart cart) {
-        CartDto cartDto = new CartDto();
-        cartDto.setCartId(cart.getCartId());
-        cartDto.setBookId(cart.book.getBookId());
-        cartDto.setCustomerId(cart.customer.getCustomerId());
-        cartDto.setQuantity(cart.getQuantity());
-        return cartDto;
+    public static CartResponseDto toCartDto(Cart cart) {
+        CartResponseDto cartResponseDto = new CartResponseDto();
+        cartResponseDto.setCartId(cart.getCartId());
+        cartResponseDto.setBookId(cart.book.getBookId());
+        cartResponseDto.setCustomerId(cart.customer.getCustomerId());
+        cartResponseDto.setQuantity(cart.getQuantity());
+        return cartResponseDto;
     }
 
-    public static List<CartDto> toCartDto(List<Cart> cartList) {
-        List<CartDto> cartDtoList = new ArrayList<>();
+    public static List<CartResponseDto> toCartDto(List<Cart> cartList) {
+        List<CartResponseDto> cartResponseDtoList = new ArrayList<>();
         for (Cart cart: cartList) {
-            CartDto cartDto = new CartDto();
-            cartDto.setCartId(cart.getCartId());
-            cartDto.setBookId(cart.book.getBookId());
-            cartDto.setCustomerId(cart.customer.getCustomerId());
-            cartDto.setQuantity(cart.getQuantity());
-            cartDtoList.add(cartDto);
+            CartResponseDto cartResponseDto = new CartResponseDto();
+            cartResponseDto.setCartId(cart.getCartId());
+            cartResponseDto.setBookId(cart.book.getBookId());
+            cartResponseDto.setCustomerId(cart.customer.getCustomerId());
+            cartResponseDto.setQuantity(cart.getQuantity());
+            cartResponseDtoList.add(cartResponseDto);
         }
-        return cartDtoList;
+        return cartResponseDtoList;
     }
 }

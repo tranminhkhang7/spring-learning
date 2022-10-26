@@ -1,8 +1,6 @@
 package com.example.bookscorner.controllers;
 
-import com.example.bookscorner.dto.response.CartDto;
-import com.example.bookscorner.entities.Book;
-import com.example.bookscorner.entities.Cart;
+import com.example.bookscorner.dto.request.CartRequestDto;
 import com.example.bookscorner.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +18,13 @@ public class CartController {
     }
 
     @GetMapping
-    List<CartDto> getBooksInCart() {
+    List<com.example.bookscorner.dto.response.CartResponseDto> getBooksInCart() {
         return cartService.getBooksInCart();
     }
 
-//    @PutMapping(path = "{bookId}")
-//    void updateABookInCart(@PathVariable int bookId,
-//                        @RequestBody Cart cart) {
-//        cartService.
-//    }
+    @PutMapping
+    com.example.bookscorner.dto.response.CartResponseDto updateABookInCart(@RequestBody CartRequestDto cartRequestDto) {
+        return cartService.updateABookInCart(cartRequestDto);
+    }
 
 }
