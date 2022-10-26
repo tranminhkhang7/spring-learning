@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -68,6 +69,26 @@ public class CartServiceImpl implements CartService{
 
             return cartResponseDto;
         }
+    }
+
+    @Transactional
+    public String deleteABookInCart(CartRequestDto cartRequestDto) {
+        int customerId = cartRequestDto.getCustomerId();
+        int bookId = cartRequestDto.getBookId();
+
+        List<Cart> cartFound = cartRepository.findByCustomer_CustomerIdAndBook_BookId(customerId, bookId);
+
+        if (!cartFound.isEmpty()) {
+            Cart cart = cartFound.get(0);
+
+            int cartId = cart.getCartId();
+
+            cartRepository.deleteCartByCartId(cartId);
+
+            System.out.println("cai j z");
+            return "Successfully deleted.";
+        }
+        throw new IllegalStateException("The cart does not exist");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.request.CartRequestDto;
+import com.example.bookscorner.dto.response.CartResponseDto;
 import com.example.bookscorner.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,17 @@ public class CartController {
     }
 
     @GetMapping
-    List<com.example.bookscorner.dto.response.CartResponseDto> getBooksInCart() {
+    List<CartResponseDto> getBooksInCart() {
         return cartService.getBooksInCart();
     }
 
     @PutMapping
-    com.example.bookscorner.dto.response.CartResponseDto updateABookInCart(@RequestBody CartRequestDto cartRequestDto) {
+    CartResponseDto updateABookInCart(@RequestBody CartRequestDto cartRequestDto) {
         return cartService.updateABookInCart(cartRequestDto);
     }
 
+    @DeleteMapping
+    String deleteABookInCart(@RequestBody CartRequestDto cartRequestDto) {
+        return cartService.deleteABookInCart(cartRequestDto);
+    }
 }

@@ -12,6 +12,5 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 
     List<Cart> findByCustomer_CustomerIdAndBook_BookId(int customerId, int bookId);
 
-//    @Query("INSERT INTO carts ()")
-//    void saveNewCart(CartRequestDto cartRequestDto);
+    void deleteCartByCartId(int cartId);
 }

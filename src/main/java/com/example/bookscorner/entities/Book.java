@@ -55,13 +55,13 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Cart> cart;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookGenre> bookGenres;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookAuthor> bookAuthors;
 }
 //viết unitest thì viết cho service và controller
