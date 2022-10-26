@@ -85,7 +85,6 @@ public class CartServiceImpl implements CartService{
 
             cartRepository.deleteCartByCartId(cartId);
 
-            System.out.println("cai j z");
             return "Successfully deleted.";
         }
         throw new IllegalStateException("The cart does not exist");
