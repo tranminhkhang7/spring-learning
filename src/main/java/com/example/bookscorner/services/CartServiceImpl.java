@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +37,8 @@ public class CartServiceImpl implements CartService{
         int customerId = 2;
         List<Cart> cartList = cartRepository.findByCustomer_CustomerId(customerId);
 
-        List<com.example.bookscorner.dto.response.CartResponseDto> cartResponseDtoList = Cart.toCartDto(cartList);
+        List<CartResponseDto> cartResponseDtoList = new ArrayList<>();
+        this.cartEntityAndCartResponseDtoMapper.map(cartList, cartResponseDtoList);
 
         return cartResponseDtoList;
     }

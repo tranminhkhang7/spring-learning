@@ -11,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class CartEntityAndCartResponseDtoMapper {
     @Autowired
@@ -28,6 +30,20 @@ public class CartEntityAndCartResponseDtoMapper {
         }
         if (cartEntity.getBook() != null) {
             cartResponseDto.setBookId(cartEntity.getBook().getBookId());
+        }
+    }
+    //Maps from List of entities to List of Dtos
+    public void map(List<Cart> cartEntityList, List<CartResponseDto> cartResponseDtoList) {
+        for (Cart cartEntity: cartEntityList) {
+            CartResponseDto cartResponseDto = new CartResponseDto();
+            BeanUtils.copyProperties(cartEntity, cartResponseDto);
+            if (cartEntity.getCustomer() != null) {
+                cartResponseDto.setCustomerId(cartEntity.getCustomer().getCustomerId());
+            }
+            if (cartEntity.getBook() != null) {
+                cartResponseDto.setBookId(cartEntity.getBook().getBookId());
+            }
+            cartResponseDtoList.add(cartResponseDto);
         }
     }
 

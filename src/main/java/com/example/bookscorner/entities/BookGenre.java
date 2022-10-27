@@ -1,7 +1,12 @@
 package com.example.bookscorner.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "book_genre")
 public class BookGenre {

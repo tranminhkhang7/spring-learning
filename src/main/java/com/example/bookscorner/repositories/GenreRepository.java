@@ -19,4 +19,6 @@ public interface GenreRepository extends JpaRepository<Genre, Integer> {
 
     @Query ("SELECT b FROM Book b JOIN BookGenre bg ON b.bookId = bg.book.bookId WHERE bg.genre.genreId = :genreId")
     List<Book> getAllBooksByGenre (@Param("genreId") int genreId);
+
+    Genre findGenreByGenreId(int genreId);
 }

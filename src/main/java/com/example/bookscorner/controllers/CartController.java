@@ -6,6 +6,7 @@ import com.example.bookscorner.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,12 +25,12 @@ public class CartController {
     }
 
     @PutMapping
-    CartResponseDto updateABookInCart(@RequestBody CartRequestDto cartRequestDto) {
+    CartResponseDto updateABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         return cartService.updateABookInCart(cartRequestDto);
     }
 
     @DeleteMapping
-    String deleteABookInCart(@RequestBody CartRequestDto cartRequestDto) {
+    String deleteABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         return cartService.deleteABookInCart(cartRequestDto);
     }
 }

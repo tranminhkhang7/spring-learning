@@ -1,5 +1,6 @@
 package com.example.bookscorner.controllers;
 
+import com.example.bookscorner.dto.request.BookRequestDto;
 import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
@@ -32,16 +33,20 @@ public class BookController {
         return bookService.searchBooks(query, genre);
     }
 
+    @GetMapping("/{bookId}")
+    BookResponseDto getBook(@PathVariable int bookId) {
+        return bookService.getBook(bookId);
+    }
+
     @PostMapping
-    BookResponseDto addNewBook(@RequestBody Book book) {
-        return bookService.addNewBook(book);
+    BookResponseDto addNewBook(@RequestBody BookRequestDto bookRequestDto) {
+        return bookService.addNewBook(bookRequestDto);
     }
 
     @PutMapping
     BookResponseDto updateBook(@RequestBody Book book) {
         return bookService.updateBook(book);
     }
-
     @DeleteMapping
     BookResponseDto deleteBook(@RequestBody Book book) {
         return bookService.deleteBook(book);

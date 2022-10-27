@@ -28,6 +28,9 @@ public class Book {
     @Column(name = "title", length = 255)
     private String title;
 
+    @Column(name = "author", length = 255)
+    private String author;
+
     @Column(name = "status", length = 55)
     private String status;
 
@@ -43,11 +46,11 @@ public class Book {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "average_rate")
-    private double averageRate;
-
-    @Column(name = "count_rate")
-    private int countRate;
+//    @Column(name = "average_rate")
+//    private double averageRate;
+//
+//    @Column(name = "count_rate")
+//    private int countRate;
 
     @Column(name = "quantity_left")
     private int quantityLeft;
@@ -55,14 +58,17 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Cart> cart;
 
+    @OneToMany(mappedBy = "book")
+    private List<Comment> bookComments;
+
+    @OneToMany(mappedBy = "book")
+    private List<Favourite> BookFavourite;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookGenre> bookGenres;
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<BookAuthor> bookAuthors;
 }
 //viết unitest thì viết cho service và controller
 //nếu ko đủ thời gian thì có thể viết một vài service và controller tiêu biểu

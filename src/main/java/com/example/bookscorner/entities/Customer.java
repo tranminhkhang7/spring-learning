@@ -41,6 +41,12 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     List<Cart> cart;
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    List<Cart> comment;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    List<Cart> favourite;
+
     @OneToMany(mappedBy = "customer")
     List<Order> order;
 }

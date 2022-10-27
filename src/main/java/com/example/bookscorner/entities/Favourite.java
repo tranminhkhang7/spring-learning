@@ -1,40 +1,38 @@
 package com.example.bookscorner.entities;
 
-import com.example.bookscorner.dto.response.CartResponseDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "carts")
-public class Cart {
+@Table(name = "favourites")
+public class Favourite {
     @Id
     @SequenceGenerator(
-            name = "carts_sequence",
-            sequenceName = "cards_sequence",
+            name = "favourites_sequence",
+            sequenceName = "favourites_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "cards_sequence"
+            generator = "favourites_sequence"
     )
-    private int cartId;
+    @Column(name = "favourite_id")
+    private int favouriteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     Customer customer;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "book_id")
     Book book;
-
-    @Column(name = "quantity")
-    int quantity;
 }
