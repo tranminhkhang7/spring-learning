@@ -24,7 +24,7 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.getAccounts());
     }
 
-    @PostMapping("/save")
+    @PostMapping() //ko dùng động từ.
     public ResponseEntity<AccountResponseDto> addNewAccount(@RequestBody AccountRequestDto accountRequestDto){
         return ResponseEntity.ok().body(accountService.addNewAccount(accountRequestDto));
     }

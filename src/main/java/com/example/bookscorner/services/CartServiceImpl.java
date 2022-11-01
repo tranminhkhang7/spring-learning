@@ -2,12 +2,15 @@ package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.request.CartRequestDto;
 import com.example.bookscorner.dto.response.CartResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Cart;
 import com.example.bookscorner.mappers.CartEntityAndCartRequestDtoMapper;
 import com.example.bookscorner.mappers.CartEntityAndCartResponseDtoMapper;
 import com.example.bookscorner.repositories.CartRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -74,7 +77,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Transactional
-    public String deleteABookInCart(CartRequestDto cartRequestDto) {
+    public ResponseEntity<ResponseDto> deleteABookInCart(CartRequestDto cartRequestDto) {
         int customerId = cartRequestDto.getCustomerId();
         int bookId = cartRequestDto.getBookId();
 
@@ -87,7 +90,8 @@ public class CartServiceImpl implements CartService{
 
             cartRepository.deleteCartByCartId(cartId);
 
-            return "Successfully deleted.";
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(null, "Successfully deleted.","200"));
+
         }
         throw new IllegalStateException("The cart does not exist");
     }

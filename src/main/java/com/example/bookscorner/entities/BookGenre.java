@@ -30,4 +30,9 @@ public class BookGenre {
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    public BookGenre(Book book, Genre genre) {
+        this.book = book;
+        this.genre = genre;
+    }
 }

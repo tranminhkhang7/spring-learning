@@ -2,8 +2,11 @@ package com.example.bookscorner.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.bookscorner.entities.Customer;
+import com.example.bookscorner.repositories.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,9 +26,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+
+//    @Autowired
+//    private CustomerRepository customerRepository;
+
+//    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, CustomerRepository customerRepository) {
+//        this.authenticationManager = authenticationManager;
+//        this.customerRepository = customerRepository;
+//    }
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -51,20 +64,26 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURI().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-        String refresh_token = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .withIssuer(request.getRequestURI().toString())
-                .sign(algorithm);
+//        Customer customer = customerRepository.findCustomerByMAccount_Email(user.getUsername());
+//        String customerName = customer.getName();
+
+
+//        String refresh_token = JWT.create()
+//                .withSubject(user.getUsername())
+//                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+//                .withIssuer(request.getRequestURI().toString())
+//                .sign(algorithm);
 
 //        String refresh_token = jwtUtil.generateToken(user, refreshTokenExpiration);
         response.setHeader("access_token", access_token);
-        response.setHeader("refresh_token", refresh_token);
-
+//        response.setHeader("refresh_token", refresh_token);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
-        tokens.put("refresh_token", refresh_token);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//        tokens.put("customer_name", customerName);
+
+//        tokens.put("user_name", userName);
+//        tokens.put("refresh_token", refresh_token);
+        response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
     }

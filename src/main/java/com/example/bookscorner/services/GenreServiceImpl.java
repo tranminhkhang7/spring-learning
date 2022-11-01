@@ -1,15 +1,17 @@
 package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.repositories.GenreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,7 +32,7 @@ public class GenreServiceImpl implements GenreService{
         return genreRepository.findAll();
     }
 
-    public void addNewGenre(Genre genre) {
+    public Genre addNewGenre(Genre genre) {
 //        Optional<Genre> genreOptional = genreRepository
 //                .findGenreByGenreName(genre.getGenreName());
 //        if (genreOptional.isPresent()) {
@@ -41,9 +43,11 @@ public class GenreServiceImpl implements GenreService{
             throw new IllegalStateException("The genre is existing");
         }
         genreRepository.save(genre);
+
+        return genre;
     }
 
-    public void updateGenre(int genreId, Genre genre) {
+    public Genre updateGenre(int genreId, Genre genre) {
         boolean exists = genreRepository.existsById(genreId);
         if (!exists) {
             throw new IllegalStateException("The genre you want to update does not exist");
@@ -54,14 +58,21 @@ public class GenreServiceImpl implements GenreService{
         genreOld.setGenreName(genre.getGenreName());
 
         genreRepository.save(genreOld);
+
+        return genreOld;
     }
 
-    public void deleteGenre(int genreId) {
+    public ResponseEntity<ResponseDto> deleteGenre(int genreId) {
         boolean exists = genreRepository.existsById(genreId);
         if (!exists) {
              throw new IllegalStateException("The genre does not  exist");
         }
         genreRepository.deleteById(genreId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseDto(null,
+                        "Successfully delete the item.",
+                        "200"));
     }
 
     public List<BookResponseDto> getAllBooksByGenre(int genreId) {

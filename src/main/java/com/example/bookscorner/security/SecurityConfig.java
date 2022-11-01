@@ -1,6 +1,7 @@
 package com.example.bookscorner.security;
 
 import com.example.bookscorner.security.filter.CustomAuthenticationFilter;
+import com.example.bookscorner.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -33,11 +37,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        customAuthenticationFilter.setFilterProcessesUrl("/login");
+
+        http.cors().and();
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().anyRequest().permitAll();
 
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        //Log in
+        http.authorizeRequests().antMatchers("/login/**").permitAll();
+        //Get carts
+//        http.authorizeRequests().antMatchers(GET,"/checkout/**").hasAnyAuthority("CUSTOMER");
+        //Add books
+        http.authorizeRequests().antMatchers(POST,"/book").hasAuthority("ADMIN");
+//        http.authorizeRequests().anyRequest().authenticated();
+
+        http.addFilter(customAuthenticationFilter);
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 

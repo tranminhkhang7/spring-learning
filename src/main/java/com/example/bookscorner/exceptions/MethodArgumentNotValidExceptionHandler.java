@@ -11,15 +11,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @ControllerAdvice
 public class MethodArgumentNotValidExceptionHandler extends ResponseEntityExceptionHandler {
@@ -65,6 +64,7 @@ public class MethodArgumentNotValidExceptionHandler extends ResponseEntityExcept
         return handleExceptionInternal(
                 ex, apiError, headers, apiError.getStatus(), request);
     }
+
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(

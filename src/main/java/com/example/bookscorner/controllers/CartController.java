@@ -2,8 +2,10 @@ package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.request.CartRequestDto;
 import com.example.bookscorner.dto.response.CartResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,18 +21,18 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping
-    List<CartResponseDto> getBooksInCart() {
-        return cartService.getBooksInCart();
-    }
+//    @GetMapping
+//    public ResponseEntity<List<CartResponseDto>> getBooksInCart() {
+//        return ResponseEntity.ok().body(cartService.getBooksInCart());
+//    }
 
     @PutMapping
     CartResponseDto updateABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         return cartService.updateABookInCart(cartRequestDto);
     }
 
-    @DeleteMapping
-    String deleteABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
+    @DeleteMapping // trả về Object JSON
+    ResponseEntity<ResponseDto> deleteABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         return cartService.deleteABookInCart(cartRequestDto);
     }
 }

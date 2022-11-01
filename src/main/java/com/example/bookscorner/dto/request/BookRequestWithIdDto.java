@@ -13,8 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 // This DTO is now for:
-//      + add a new book
-public class BookRequestDto {
+//      + update an existing book
+public class BookRequestWithIdDto {
+    private int bookId;
     private String title;
     private String author;
     private String status;
@@ -24,20 +25,4 @@ public class BookRequestDto {
     private String description;
     private int quantityLeft;
     private List<Integer> bookGenres;
-
-//    @OneToMany(mappedBy = "book")
-//    private List<Cart> cart;
-//
-//    @OneToMany(mappedBy = "book")
-//    private List<Cart> bookComments;
-//
-//    @OneToMany(mappedBy = "book")
-//    private List<Cart> BookFavourite;
-//
-//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-//    private List<OrderDetail> orderDetails;
-//
-//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-//    private List<BookGenre> bookGenres;
-
 }

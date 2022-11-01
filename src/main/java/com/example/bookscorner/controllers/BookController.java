@@ -1,11 +1,13 @@
 package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.request.BookRequestDto;
+import com.example.bookscorner.dto.request.BookRequestWithIdDto;
 import com.example.bookscorner.dto.response.BookResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,18 +22,20 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/all") //to replace
-    List<BookResponseDto> getBooks() {
-        return bookService.getBooks();
+    @GetMapping()
+    ResponseEntity<List<BookResponseDto>> getBooks(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) List<String> genre) {
+        return ResponseEntity.ok().body(bookService.getBooks(query, genre));
     }
 
-    @GetMapping
-    List<BookResponseDto> searchBooks(
-            @RequestParam(required = false) String query,
-            @RequestParam(required = false) List<String> genre
-    ) {
-        return bookService.searchBooks(query, genre);
-    }
+//    @GetMapping // gom lại với api trên
+//    List<BookResponseDto> searchBooks(
+//            @RequestParam(required = false) String query,
+//            @RequestParam(required = false) List<String> genre
+//    ) {
+//        return bookService.searchBooks(query, genre);
+//    }
 
     @GetMapping("/{bookId}")
     BookResponseDto getBook(@PathVariable int bookId) {
@@ -44,8 +48,8 @@ public class BookController {
     }
 
     @PutMapping
-    BookResponseDto updateBook(@RequestBody Book book) {
-        return bookService.updateBook(book);
+    BookResponseDto updateBook(@RequestBody BookRequestWithIdDto bookRequestWithIdDto) {
+        return bookService.updateBook(bookRequestWithIdDto);
     }
     @DeleteMapping
     BookResponseDto deleteBook(@RequestBody Book book) {

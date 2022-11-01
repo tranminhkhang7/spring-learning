@@ -3,6 +3,7 @@ package com.example.bookscorner.services;
 import com.example.bookscorner.dto.request.AccountRequestDto;
 import com.example.bookscorner.dto.response.AccountResponseDto;
 import com.example.bookscorner.entities.Account;
+import com.example.bookscorner.entities.Role;
 import com.example.bookscorner.mappers.ObjectMapperUtils;
 import com.example.bookscorner.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +42,13 @@ public class AccountServiceImpl implements AccountService, UserDetailsService { 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(username);
+
         if (account == null) {
+            log.info(username);
             log.error("Account not found in the database.");
             throw new UsernameNotFoundException("Account not found in the database.");
         } else {
+            log.info(account.getEmail() + " " + account.getPassword());
             log.info("Account found in the database");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -78,6 +82,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService { 
     public AccountResponseDto addNewAccount(AccountRequestDto accountRequestDto) {
         Account account = mapper.map(accountRequestDto, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(new Role(2, "CUSTOMER"));
+        account.setRoles(roleList);
 
         accountRepository.save(account);
 

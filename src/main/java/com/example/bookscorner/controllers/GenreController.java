@@ -1,10 +1,12 @@
 package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +31,18 @@ public class GenreController {
         return genreService.getAllBooksByGenre(genreId);
     }
 
-    @PostMapping
-    void addNewGenre(@RequestBody Genre genre) {
-        genreService.addNewGenre(genre);
+    @PostMapping // phải return object json
+    Genre addNewGenre(@RequestBody Genre genre) {
+        return genreService.addNewGenre(genre);
     }
 
-    @PutMapping(path = "{genreId}")
-    void updateGenre(@PathVariable("genreId") int genreId, @RequestBody Genre genre) {
-        genreService.updateGenre(genreId, genre);
+    @PutMapping(path = "{genreId}") // phải return object json, chưa đối tượng
+    Genre updateGenre(@PathVariable("genreId") int genreId, @RequestBody Genre genre) {
+        return genreService.updateGenre(genreId, genre);
     }
  
-    @DeleteMapping(path = "{genreId}")
-    void deleteGenre(@PathVariable("genreId") int genreId){
-        genreService.deleteGenre(genreId);
+    @DeleteMapping(path = "{genreId}") // phải return object json, chứa message
+    ResponseEntity<ResponseDto> deleteGenre(@PathVariable("genreId") int genreId){
+        return genreService.deleteGenre(genreId);
     }
 }
