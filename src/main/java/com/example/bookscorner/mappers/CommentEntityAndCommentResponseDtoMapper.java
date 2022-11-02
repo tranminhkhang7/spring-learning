@@ -12,6 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class CommentEntityAndCommentResponseDtoMapper {
     @Autowired
@@ -20,9 +23,13 @@ public class CommentEntityAndCommentResponseDtoMapper {
     @Autowired
     private BookRepository bookRepository;
 
-    // Maps from entity response dto
-    public void map(Comment commentEntity, CommentResponseDto commentResponseDto) {
-        BeanUtils.copyProperties(commentEntity, commentResponseDto);
+    // Entity to dto
+    public CommentResponseDto mapToDto(Comment commentEntity) {
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
+
+//        BeanUtils.copyProperties(commentEntity, commentResponseDto);
+        commentResponseDto.setTimestamp(commentEntity.getTimestamp());
+        commentResponseDto.setContent(commentEntity.getContent());
 
         if (commentEntity.getCustomer() != null) {
             commentResponseDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
@@ -30,12 +37,18 @@ public class CommentEntityAndCommentResponseDtoMapper {
         if (commentEntity.getBook() != null) {
             commentResponseDto.setBookId(commentEntity.getBook().getBookId());
         }
+
+        return commentResponseDto;
     }
 
     // Maps from do to entity
-    public void map(CommentResponseDto commentResponseDto, Comment commentEntity) {
-        BeanUtils.copyProperties(commentResponseDto, commentEntity);
+    public Comment mapToEntity(CommentResponseDto commentResponseDto) {
+        Comment commentEntity = new Comment();
 
+//        BeanUtils.copyProperties(commentResponseDto, commentEntity);
+
+        commentEntity.setTimestamp(commentResponseDto.getTimestamp());
+        commentEntity.setContent(commentResponseDto.getContent());
 
         int customerId = commentResponseDto.getCustomerId();
         Customer customer = customerRepository.findCustomerByCustomerId(customerId);
@@ -44,5 +57,30 @@ public class CommentEntityAndCommentResponseDtoMapper {
         int bookId = commentResponseDto.getBookId();
         Book book = bookRepository.findBookByBookId(bookId);
         commentEntity.setBook(book);
+
+        return commentEntity;
+    }
+
+    // entity list to dto list
+    public List<CommentResponseDto> mapToListDto(List<Comment> commentEntityList) {
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+
+        for (Comment commentEntity: commentEntityList) {
+            CommentResponseDto commentResponseDto = new CommentResponseDto();
+//            BeanUtils.copyProperties(commentEntity, commentResponseDto);
+
+            commentResponseDto.setTimestamp(commentEntity.getTimestamp());
+            commentResponseDto.setContent(commentEntity.getContent());
+
+            if (commentEntity.getCustomer() != null) {
+                commentResponseDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
+            }
+            if (commentEntity.getBook() != null) {
+                commentResponseDto.setBookId(commentEntity.getBook().getBookId());
+            }
+            commentResponseDtoList.add(commentResponseDto);
+        }
+
+        return commentResponseDtoList;
     }
 }

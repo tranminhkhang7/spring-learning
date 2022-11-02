@@ -7,6 +7,8 @@ import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.BookGenre;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.exceptions.NotFoundException;
+import com.example.bookscorner.mappers.BookEntityAndBookResponseDtoMapper;
+import com.example.bookscorner.mappers.ObjectMapperUtils;
 import com.example.bookscorner.repositories.BookGenreRepository;
 import com.example.bookscorner.repositories.BookRepository;
 import com.example.bookscorner.repositories.GenreRepository;
@@ -31,27 +33,32 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private final ModelMapper mapper;
 
-    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository, BookGenreRepository bookGenreRepository, ModelMapper mapper) {
+    @Autowired
+    private ObjectMapperUtils objectMapperUtils; //final?
+
+    @Autowired
+    private BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper;
+
+    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository, BookGenreRepository bookGenreRepository, ModelMapper mapper,BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper) {
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.bookGenreRepository = bookGenreRepository;
         this.mapper = mapper;
+         this.bookEntityAndBookResponseDtoMapper = bookEntityAndBookResponseDtoMapper;
+
     }
 
     public List<BookResponseDto> getBooks(String query, List<String> genre) {
         if (null == query && null == genre) {
             List<Book> bookList = bookRepository.findAll();
 
-            List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
-            for (Book book: bookList) {
-                BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
-                bookResponseDtoList.add(bookResponseDto);
-            }
+            List<BookResponseDto> bookResponseDtoList =
+                    bookEntityAndBookResponseDtoMapper.mapToResponseDto(bookList);
 
             return bookResponseDtoList;
         }
 
-//        if (genre == null || query == null) return null;
+        //Query and genre list are not null
 
         List<Integer> newList = new ArrayList<>();
         for(String s : genre) {
@@ -64,16 +71,10 @@ public class BookServiceImpl implements BookService {
 
         List<Book> listBooks = bookRepository.searchBooks(query, newList);
 
-        List<BookResponseDto> listBooksDto = new ArrayList<>();
+        List<BookResponseDto> bookResponseDtoList =
+                bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
 
-        for (Book bookEntity: listBooks) {
-            BookResponseDto bookResponseDto = mapper.map(bookEntity, BookResponseDto.class);
-            listBooksDto.add(bookResponseDto);
-        }
-
-        System.out.println(listBooksDto);
-
-        return listBooksDto;
+        return bookResponseDtoList;
     }
 
     public BookResponseDto getBook(int bookId) {

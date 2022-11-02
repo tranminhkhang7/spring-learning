@@ -29,7 +29,7 @@ public class BookController {
         return ResponseEntity.ok().body(bookService.getBooks(query, genre));
     }
 
-//    @GetMapping // gom lại với api trên
+//    @GetMapping // gom lại với api trên. ĐÃ SỬA
 //    List<BookResponseDto> searchBooks(
 //            @RequestParam(required = false) String query,
 //            @RequestParam(required = false) List<String> genre

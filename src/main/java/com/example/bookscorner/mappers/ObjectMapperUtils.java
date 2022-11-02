@@ -23,6 +23,6 @@ public class ObjectMapperUtils {
     public static <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
         return entityList.stream()
                 .map(entity -> map(entity, outCLass))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()).stream().toList();
     }
 }

@@ -31,7 +31,7 @@ public class CartController {
         return cartService.updateABookInCart(cartRequestDto);
     }
 
-    @DeleteMapping // trả về Object JSON
+    @DeleteMapping // trả về Object JSON. ĐÃ SỬA
     ResponseEntity<ResponseDto> deleteABookInCart(@Valid @RequestBody CartRequestDto cartRequestDto) {
         return cartService.deleteABookInCart(cartRequestDto);
     }

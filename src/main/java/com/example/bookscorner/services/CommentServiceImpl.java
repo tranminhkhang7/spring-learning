@@ -3,6 +3,8 @@ package com.example.bookscorner.services;
 import com.example.bookscorner.dto.request.CommentRequestDto;
 import com.example.bookscorner.dto.response.CommentResponseDto;
 import com.example.bookscorner.entities.Comment;
+import com.example.bookscorner.exceptions.NotFoundException;
+import com.example.bookscorner.exceptions.ResourceNotFoundException;
 import com.example.bookscorner.mappers.CommentEntityAndCommentRequestDtoMapper;
 import com.example.bookscorner.mappers.CommentEntityAndCommentResponseDtoMapper;
 import com.example.bookscorner.repositories.BookRepository;
@@ -10,6 +12,9 @@ import com.example.bookscorner.repositories.CommentRepository;
 import com.example.bookscorner.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService{
@@ -40,22 +45,34 @@ public class CommentServiceImpl implements CommentService{
         int customerId = commentRequestDto.getCustomerId();
         int bookId = commentRequestDto.getBookId();
         if (customerRepository.findCustomerByCustomerId(customerId) == null) {
-            throw new IllegalStateException("This customer does not exist.");
+            throw new NotFoundException("This customer does not exist.");
         }
         if (bookRepository.findBookByBookId(bookId) == null) {
-            throw new IllegalStateException("This book does not exist.");
+            throw new NotFoundException("This book does not exist.");
         }
         if (commentRepository.findCommentByCustomer_CustomerIdAndBook_BookId(customerId, bookId) != null) {
-            throw new IllegalStateException("This customer have commented this book.");
+            throw new NotFoundException("This customer have commented this book.");
         }
 
-        Comment comment = new Comment();
-        entityAndRequestDtoMapper.map(commentRequestDto, comment);
+        Comment comment = entityAndRequestDtoMapper.mapToEntity(commentRequestDto);
 
         commentRepository.save(comment);
 
-        CommentResponseDto commentResponseDto = new CommentResponseDto();
-        entityAndResponseDtoMapper.map(comment, commentResponseDto);
+        CommentResponseDto commentResponseDto =
+                entityAndResponseDtoMapper.mapToDto(comment);
         return commentResponseDto;
+    }
+
+    public List<CommentResponseDto> getCommentsOfABook(int bookId) {
+        if (bookRepository.findBookByBookId(bookId) == null) {
+            throw new NotFoundException("This book does not exist.");
+        }
+
+        List<Comment> commentList = commentRepository.findCommentsByBook_BookId(bookId);
+
+        List<CommentResponseDto> commentResponseDtoList =
+                entityAndResponseDtoMapper.mapToListDto(commentList);
+
+        return commentResponseDtoList;
     }
 }

@@ -20,9 +20,14 @@ public class CommentEntityAndCommentRequestDtoMapper {
     @Autowired
     private BookRepository bookRepository;
 
-    // Maps from entity to request dto
-    public void map(Comment commentEntity, CommentRequestDto commentRequestDto) {
-        BeanUtils.copyProperties(commentEntity, commentRequestDto);
+    // Entity to Dto
+    public CommentRequestDto mapToDto(Comment commentEntity) {
+        CommentRequestDto commentRequestDto = new CommentRequestDto();
+
+//        BeanUtils.copyProperties(commentEntity, commentRequestDto);
+
+        commentRequestDto.setTimestamp(commentEntity.getTimestamp());
+        commentRequestDto.setContent(commentEntity.getContent());
 
         if (commentEntity.getCustomer() != null) {
             commentRequestDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
@@ -30,11 +35,17 @@ public class CommentEntityAndCommentRequestDtoMapper {
         if (commentEntity.getBook() != null) {
             commentRequestDto.setBookId(commentEntity.getBook().getBookId());
         }
+
+        return commentRequestDto;
     }
 
-    // Maps from request dto to entity
-    public void map(CommentRequestDto commentRequestDto, Comment commentEntity) {
-        BeanUtils.copyProperties(commentRequestDto, commentEntity);
+    // Dto to Entity
+    public Comment mapToEntity(CommentRequestDto commentRequestDto) {
+        Comment commentEntity = new Comment();
+//        BeanUtils.copyProperties(commentEntity, commentRequestDto);
+
+        commentEntity.setTimestamp(commentRequestDto.getTimestamp());
+        commentEntity.setContent(commentRequestDto.getContent());
 
         int customerId = commentRequestDto.getCustomerId();
         Customer customer = customerRepository.findCustomerByCustomerId(customerId);
@@ -43,5 +54,9 @@ public class CommentEntityAndCommentRequestDtoMapper {
         int bookId = commentRequestDto.getBookId();
         Book book = bookRepository.findBookByBookId(bookId);
         commentEntity.setBook(book);
+
+        return commentEntity;
     }
+
+
 }

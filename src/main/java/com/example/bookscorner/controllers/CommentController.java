@@ -4,10 +4,9 @@ import com.example.bookscorner.dto.request.CommentRequestDto;
 import com.example.bookscorner.dto.response.CommentResponseDto;
 import com.example.bookscorner.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("comment")
@@ -21,7 +20,11 @@ public class CommentController {
 
     @PostMapping
     CommentResponseDto addComment(@RequestBody CommentRequestDto commentRequestDto) {
-
         return commentService.addComment(commentRequestDto);
+    }
+
+    @GetMapping("/{bookId}")
+    List<CommentResponseDto> getCommentsOfABook(@PathVariable int bookId) {
+        return commentService.getCommentsOfABook(bookId);
     }
 }

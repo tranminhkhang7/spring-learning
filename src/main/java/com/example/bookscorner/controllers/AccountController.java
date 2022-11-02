@@ -24,7 +24,7 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.getAccounts());
     }
 
-    @PostMapping() //ko dùng động từ.
+    @PostMapping() //ko dùng động từ. ĐÃ SỬA
     public ResponseEntity<AccountResponseDto> addNewAccount(@RequestBody AccountRequestDto accountRequestDto){
         return ResponseEntity.ok().body(accountService.addNewAccount(accountRequestDto));
     }

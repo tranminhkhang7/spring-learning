@@ -31,17 +31,17 @@ public class GenreController {
         return genreService.getAllBooksByGenre(genreId);
     }
 
-    @PostMapping // phải return object json
+    @PostMapping // phải return object json. ĐÃ SỬA
     Genre addNewGenre(@RequestBody Genre genre) {
         return genreService.addNewGenre(genre);
     }
 
-    @PutMapping(path = "{genreId}") // phải return object json, chưa đối tượng
+    @PutMapping(path = "{genreId}") // phải return object json, chưa đối tượng. ĐÃ SỬA
     Genre updateGenre(@PathVariable("genreId") int genreId, @RequestBody Genre genre) {
         return genreService.updateGenre(genreId, genre);
     }
  
-    @DeleteMapping(path = "{genreId}") // phải return object json, chứa message
+    @DeleteMapping(path = "{genreId}") // phải return object json, chứa message. ĐÃ SỬA
     ResponseEntity<ResponseDto> deleteGenre(@PathVariable("genreId") int genreId){
         return genreService.deleteGenre(genreId);
     }
