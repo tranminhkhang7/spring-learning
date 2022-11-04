@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.bookscorner.entities.Customer;
 import com.example.bookscorner.repositories.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,16 +34,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-//    @Autowired
-//    private CustomerRepository customerRepository;
+    @Autowired
+    private final CustomerRepository customerRepository;
 
-//    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, CustomerRepository customerRepository) {
-//        this.authenticationManager = authenticationManager;
-//        this.customerRepository = customerRepository;
-//    }
-
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, CustomerRepository customerRepository) {
         this.authenticationManager = authenticationManager;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -75,10 +73,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 //                .sign(algorithm);
 
 //        String refresh_token = jwtUtil.generateToken(user, refreshTokenExpiration);
+        Customer customer = customerRepository.findByAccount_Email(user.getUsername());
+
         response.setHeader("access_token", access_token);
+        response.setHeader("user_name", customer.getName());
+        response.setHeader("user_id", Integer.toString(customer.getCustomerId()));
+//        response.setHeader("customer_id", user.);
 //        response.setHeader("refresh_token", refresh_token);
-        Map<String, String> tokens = new HashMap<>();
+        Map<String, Object> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
+        tokens.put("user_name", customer.getName());
+        tokens.put("user_id", customer.getCustomerId());
 //        tokens.put("customer_name", customerName);
 
 //        tokens.put("user_name", userName);

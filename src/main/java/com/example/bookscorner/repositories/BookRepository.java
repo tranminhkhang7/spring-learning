@@ -18,9 +18,10 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b " +
             "FROM Book b JOIN BookGenre bg ON b.bookId = bg.book.bookId " +
             "WHERE b.title LIKE %?1% " +
-            "AND bg.genre.genreId IN ?2")
-    List<Book> searchBooks(String query, List<Integer> genre);
-
+            "AND bg.genre.genreId IN ?2 " +
+            "AND b.status = ?3")
+    public List<Book> searchBooks(String query, List<Integer> genre, String status);
     public Book findBookByBookId(int bookId);
-
+    public List<Book> findAll();
+    public List<Book> findAllByStatus(String status);
 }

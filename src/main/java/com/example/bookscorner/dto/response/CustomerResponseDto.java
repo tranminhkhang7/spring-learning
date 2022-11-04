@@ -21,4 +21,5 @@ public class CustomerResponseDto {
     private String name;
     private String gender;
     private Date birthday;
+    private String status;
 }

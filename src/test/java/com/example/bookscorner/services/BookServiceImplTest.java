@@ -49,11 +49,11 @@ public class BookServiceImplTest {
         bookEntityAndBookResponseDtoMapper = mock(BookEntityAndBookResponseDtoMapper.class);
 
 
-        bookService = new BookServiceImpl(bookRepository,
-                genreRepository,
-                bookGenreRepository,
-                modelMapper,
-                bookEntityAndBookResponseDtoMapper);
+//        bookService = new BookServiceImpl(bookRepository,
+//                genreRepository,
+//                bookGenreRepository,
+//                modelMapper,
+//                bookEntityAndBookResponseDtoMapper);
 
 //        expectedCustomer = CustomerResponseDto.builder().id(1L).name("name").email("email").phoneNumber("phoneNumber")
 //                .address("address").roleName("roleName").build();
@@ -67,7 +67,7 @@ public class BookServiceImplTest {
         when(bookRepository.findAll()).thenReturn(bookList);
         when(bookEntityAndBookResponseDtoMapper.mapToResponseDto(bookList)).thenReturn(bookResponseDtoList);
 
-        List<BookResponseDto> results = bookService.getBooks(null, null);//
+        List<BookResponseDto> results = bookService.getAllBooks();//
 
         assertEquals(bookResponseDtoList, results);
     }
@@ -86,12 +86,12 @@ public class BookServiceImplTest {
         List<Integer> genreListCaptor = new ArrayList<>();
         genreListCaptor.add(1);
 
-        when(bookRepository.searchBooks(query,genreListCaptor)).thenReturn(bookList);
+        when(bookRepository.searchBooks(query,genreListCaptor, "active")).thenReturn(bookList);
         when(bookEntityAndBookResponseDtoMapper.mapToResponseDto(bookList)).thenReturn(expect);
 
-        List<BookResponseDto> actual = bookService.getBooks(query,input);
+        List<BookResponseDto> actual = bookService.getAllBooks();
 
-        verify(bookRepository).searchBooks(query,genreListCaptor);
+        verify(bookRepository).searchBooks(query,genreListCaptor, "active");
         verify(bookEntityAndBookResponseDtoMapper).mapToResponseDto(bookList);
 
         assertEquals(expect, actual);

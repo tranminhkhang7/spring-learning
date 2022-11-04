@@ -1,5 +1,6 @@
 package com.example.bookscorner.security;
 
+import com.example.bookscorner.repositories.CustomerRepository;
 import com.example.bookscorner.security.filter.CustomAuthenticationFilter;
 import com.example.bookscorner.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final CustomerRepository customerRepository;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -37,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), customerRepository);
         customAuthenticationFilter.setFilterProcessesUrl("/login");
 
         http.cors().and();
@@ -50,12 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Get carts
 //        http.authorizeRequests().antMatchers(GET,"/checkout/**").hasAnyAuthority("CUSTOMER");
         //Add books
-        http.authorizeRequests().antMatchers(POST,"/book").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(POST,"/book/admin").hasAuthority("ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-
     }
 
     @Bean

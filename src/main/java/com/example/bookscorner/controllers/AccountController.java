@@ -2,6 +2,7 @@ package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.request.AccountRequestDto;
 import com.example.bookscorner.dto.response.AccountResponseDto;
+import com.example.bookscorner.dto.response.CustomerResponseDto;
 import com.example.bookscorner.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AccountController {
     }
 
     @PostMapping() //ko dùng động từ. ĐÃ SỬA
-    public ResponseEntity<AccountResponseDto> addNewAccount(@RequestBody AccountRequestDto accountRequestDto){
+    public ResponseEntity<CustomerResponseDto> addNewAccount(@RequestBody AccountRequestDto accountRequestDto){
         return ResponseEntity.ok().body(accountService.addNewAccount(accountRequestDto));
     }
 }

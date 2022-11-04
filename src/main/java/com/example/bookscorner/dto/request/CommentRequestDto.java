@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class CommentRequestDto {
     public Timestamp timestamp;
     public String content;
+    public float rating;
     public int customerId;
     public int bookId;
 }

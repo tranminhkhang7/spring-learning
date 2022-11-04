@@ -19,4 +19,14 @@ public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = ExistedException.class)
+    public ResponseEntity<Object> handleExistedException(ExistedException ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.CONFLICT,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+    }
 }

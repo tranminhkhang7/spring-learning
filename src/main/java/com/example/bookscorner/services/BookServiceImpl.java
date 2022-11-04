@@ -2,18 +2,24 @@ package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.request.BookRequestDto;
 import com.example.bookscorner.dto.request.BookRequestWithIdDto;
+import com.example.bookscorner.dto.response.BookDetailResponseDto;
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.BookGenre;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.exceptions.NotFoundException;
+import com.example.bookscorner.mappers.BookEntityAndBookDetailResponseDtoMapper;
 import com.example.bookscorner.mappers.BookEntityAndBookResponseDtoMapper;
 import com.example.bookscorner.mappers.ObjectMapperUtils;
 import com.example.bookscorner.repositories.BookGenreRepository;
 import com.example.bookscorner.repositories.BookRepository;
 import com.example.bookscorner.repositories.GenreRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     @Autowired
     private final BookRepository bookRepository;
@@ -39,18 +46,26 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper;
 
-    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository, BookGenreRepository bookGenreRepository, ModelMapper mapper,BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper) {
-        this.bookRepository = bookRepository;
-        this.genreRepository = genreRepository;
-        this.bookGenreRepository = bookGenreRepository;
-        this.mapper = mapper;
-         this.bookEntityAndBookResponseDtoMapper = bookEntityAndBookResponseDtoMapper;
+    @Autowired
+    private BookEntityAndBookDetailResponseDtoMapper bookDetailResponseMapper;
 
-    }
+//    public BookServiceImpl(BookRepository bookRepository,
+//                           GenreRepository genreRepository,
+//                           BookGenreRepository bookGenreRepository,
+//                           ModelMapper mapper,
+//                           BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper,
+//                           BookEntityAndBookDetailResponseDtoMapper bookDetailResponseMapper) {
+//        this.bookRepository = bookRepository;
+//        this.genreRepository = genreRepository;
+//        this.bookGenreRepository = bookGenreRepository;
+//        this.mapper = mapper;
+//        this.bookEntityAndBookResponseDtoMapper = bookEntityAndBookResponseDtoMapper;
+//        this.bookDetailResponseMapper = bookDetailResponseMapper;
+//    }
 
-    public List<BookResponseDto> getBooks(String query, List<String> genre) {
+    public List<BookResponseDto> getBooksWithActiveStatus(String query, List<String> genre) {
         if (null == query && null == genre) {
-            List<Book> bookList = bookRepository.findAll();
+            List<Book> bookList = bookRepository.findAllByStatus("active");
 
             List<BookResponseDto> bookResponseDtoList =
                     bookEntityAndBookResponseDtoMapper.mapToResponseDto(bookList);
@@ -69,7 +84,14 @@ public class BookServiceImpl implements BookService {
             }
         }
 
-        List<Book> listBooks = bookRepository.searchBooks(query, newList);
+        List<Book> listBooks = bookRepository.searchBooks(query, newList, "active");
+        List<BookResponseDto> bookResponseDtoList =
+                bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
+        return bookResponseDtoList;
+    }
+
+    public List<BookResponseDto> getAllBooks() {
+        List<Book> listBooks = bookRepository.findAll();
 
         List<BookResponseDto> bookResponseDtoList =
                 bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
@@ -77,14 +99,19 @@ public class BookServiceImpl implements BookService {
         return bookResponseDtoList;
     }
 
-    public BookResponseDto getBook(int bookId) {
+
+
+    public BookDetailResponseDto getBook(int bookId) {
         boolean exists = bookRepository.existsById(bookId);
         if (!exists) {
-            throw new IllegalStateException("The book you want to retrieve does not exist");
+            throw new NotFoundException("The book you want to retrieve does not exist");
         }
 
         Book book = bookRepository.findBookByBookId(bookId);
-        return null;
+
+        BookDetailResponseDto bookDetailResponseDto = bookDetailResponseMapper.mapToDetailResponseDto(book);
+
+        return bookDetailResponseDto;
     }
 
     @Transactional
@@ -143,19 +170,20 @@ public class BookServiceImpl implements BookService {
         return bookResponseDto;
     }
 
-    public BookResponseDto deleteBook(Book book) {
-        boolean exists = bookRepository.existsById(book.getBookId());
+    public ResponseEntity<ResponseDto> deleteBook(int bookId) {
+        boolean exists = bookRepository.existsById(bookId);
         if (!exists) {
-            throw new IllegalStateException("The book you want to delete does not exist");
+            throw new NotFoundException("The book you want to delete does not exist");
         }
 
-        Book bookOld = bookRepository.findById(book.getBookId()).get();
+        Book bookOld = bookRepository.findById(bookId).get();
 
         bookOld.setStatus("disabled");
 
         bookRepository.save(bookOld);
-        BookResponseDto bookResponseDto = mapper.map(bookOld, BookResponseDto.class);
-        return bookResponseDto;
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(null, "Successfully change the status of the book.","200"));
+
     }
 
 //    public List<BookResponseDto> searchBooks(String query, List<String> genre) {

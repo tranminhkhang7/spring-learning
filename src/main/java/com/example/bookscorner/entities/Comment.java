@@ -34,6 +34,9 @@ public class Comment {
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
+    @Column(name = "rating")
+    private float rating;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     Customer customer;

@@ -28,11 +28,16 @@ public class CommentEntityAndCommentResponseDtoMapper {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
 
 //        BeanUtils.copyProperties(commentEntity, commentResponseDto);
+        commentResponseDto.setCommentId(commentEntity.getCommentId());
         commentResponseDto.setTimestamp(commentEntity.getTimestamp());
         commentResponseDto.setContent(commentEntity.getContent());
+        commentResponseDto.setRating(commentEntity.getRating());
 
         if (commentEntity.getCustomer() != null) {
             commentResponseDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
+        }
+        if (commentEntity.getContent() != null) {
+            commentResponseDto.setCustomerName(commentEntity.getCustomer().getName());
         }
         if (commentEntity.getBook() != null) {
             commentResponseDto.setBookId(commentEntity.getBook().getBookId());
@@ -47,8 +52,10 @@ public class CommentEntityAndCommentResponseDtoMapper {
 
 //        BeanUtils.copyProperties(commentResponseDto, commentEntity);
 
+        commentEntity.setCommentId(commentResponseDto.getCommentId());
         commentEntity.setTimestamp(commentResponseDto.getTimestamp());
         commentEntity.setContent(commentResponseDto.getContent());
+        commentEntity.setRating(commentResponseDto.getRating());
 
         int customerId = commentResponseDto.getCustomerId();
         Customer customer = customerRepository.findCustomerByCustomerId(customerId);
@@ -69,11 +76,16 @@ public class CommentEntityAndCommentResponseDtoMapper {
             CommentResponseDto commentResponseDto = new CommentResponseDto();
 //            BeanUtils.copyProperties(commentEntity, commentResponseDto);
 
+            commentResponseDto.setCommentId(commentEntity.getCommentId());
             commentResponseDto.setTimestamp(commentEntity.getTimestamp());
             commentResponseDto.setContent(commentEntity.getContent());
+            commentResponseDto.setRating(commentEntity.getRating());
 
             if (commentEntity.getCustomer() != null) {
                 commentResponseDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
+            }
+            if (commentEntity.getContent() != null) {
+                commentResponseDto.setCustomerName(commentEntity.getCustomer().getName());
             }
             if (commentEntity.getBook() != null) {
                 commentResponseDto.setBookId(commentEntity.getBook().getBookId());

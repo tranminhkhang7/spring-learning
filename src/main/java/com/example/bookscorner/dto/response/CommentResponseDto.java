@@ -15,6 +15,8 @@ public class CommentResponseDto {
     public int commentId;
     public Timestamp timestamp;
     public String content;
+    public float rating;
     public int customerId;
+    public String customerName;
     public int bookId;
 }

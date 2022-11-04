@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Customer findCustomerByCustomerId(int customerId);
 
-//    Customer findCustomerByMAccount_Email(String email);
+
+    Customer findByAccount_Email(String email);
 }

@@ -2,10 +2,15 @@ package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.request.AccountRequestDto;
 import com.example.bookscorner.dto.response.AccountResponseDto;
+import com.example.bookscorner.dto.response.CustomerResponseDto;
 import com.example.bookscorner.entities.Account;
+import com.example.bookscorner.entities.Customer;
 import com.example.bookscorner.entities.Role;
+import com.example.bookscorner.exceptions.ExistedException;
+import com.example.bookscorner.exceptions.NotFoundException;
 import com.example.bookscorner.mappers.ObjectMapperUtils;
 import com.example.bookscorner.repositories.AccountRepository;
+import com.example.bookscorner.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,6 +35,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService { 
 
     @Autowired
     private final AccountRepository accountRepository;
+
+    @Autowired
+    private final CustomerRepository customerRepository;
 
     @Autowired
     private final ModelMapper mapper;
@@ -79,17 +87,35 @@ public class AccountServiceImpl implements AccountService, UserDetailsService { 
         return accountResponseDtoList;
     }
 
-    public AccountResponseDto addNewAccount(AccountRequestDto accountRequestDto) {
-        Account account = mapper.map(accountRequestDto, Account.class);
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+    public CustomerResponseDto addNewAccount(AccountRequestDto accountRequestDto) {
+        boolean exists = accountRepository.existsByEmail(accountRequestDto.getEmail());
+        if (exists) {
+            throw new ExistedException("This email is registered.");
+        }
 
+        Account account = mapper.map(accountRequestDto, Account.class);
+        Customer customer = mapper.map(accountRequestDto, Customer.class);
+
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         List<Role> roleList = new ArrayList<>();
         roleList.add(new Role(2, "CUSTOMER"));
         account.setRoles(roleList);
+//        account.setCustomer(customer);
 
-        accountRepository.save(account);
+//        Account result = accountRepository.save(account);
 
-        AccountResponseDto accountResponseDto = mapper.map(account, AccountResponseDto.class);
-        return accountResponseDto;
+//        System.out.println(result);
+
+        customer.setCustomerId(account.getAccountId());
+        customer.setStatus("active");
+        customer.setAccount(account);
+        customerRepository.save(customer);
+
+        Account result = accountRepository.save(account);
+
+
+//        CustomerResponseDto customerResponseDto = mapper.map(customer, CustomerResponseDto.class);
+//        return customerResponseDto;
+        return null;
     }
 }

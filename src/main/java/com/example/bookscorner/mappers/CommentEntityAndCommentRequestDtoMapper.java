@@ -28,6 +28,7 @@ public class CommentEntityAndCommentRequestDtoMapper {
 
         commentRequestDto.setTimestamp(commentEntity.getTimestamp());
         commentRequestDto.setContent(commentEntity.getContent());
+        commentRequestDto.setRating(commentEntity.getRating());
 
         if (commentEntity.getCustomer() != null) {
             commentRequestDto.setCustomerId(commentEntity.getCustomer().getCustomerId());
@@ -46,6 +47,7 @@ public class CommentEntityAndCommentRequestDtoMapper {
 
         commentEntity.setTimestamp(commentRequestDto.getTimestamp());
         commentEntity.setContent(commentRequestDto.getContent());
+        commentEntity.setRating(commentRequestDto.getRating());
 
         int customerId = commentRequestDto.getCustomerId();
         Customer customer = customerRepository.findCustomerByCustomerId(customerId);

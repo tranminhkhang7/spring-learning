@@ -2,7 +2,9 @@ package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.request.BookRequestDto;
 import com.example.bookscorner.dto.request.BookRequestWithIdDto;
+import com.example.bookscorner.dto.response.BookDetailResponseDto;
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.services.BookService;
@@ -23,11 +25,12 @@ public class BookController {
     }
 
     @GetMapping()
-    ResponseEntity<List<BookResponseDto>> getBooks(
+    ResponseEntity<List<BookResponseDto>> getBooksWithActiveStatus(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) List<String> genre) {
-        return ResponseEntity.ok().body(bookService.getBooks(query, genre));
+        return ResponseEntity.ok().body(bookService.getBooksWithActiveStatus(query, genre));
     }
+
 
 //    @GetMapping // gom lại với api trên. ĐÃ SỬA
 //    List<BookResponseDto> searchBooks(
@@ -38,21 +41,28 @@ public class BookController {
 //    }
 
     @GetMapping("/{bookId}")
-    BookResponseDto getBook(@PathVariable int bookId) {
+    BookDetailResponseDto getBook(@PathVariable int bookId) {
         return bookService.getBook(bookId);
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     BookResponseDto addNewBook(@RequestBody BookRequestDto bookRequestDto) {
         return bookService.addNewBook(bookRequestDto);
     }
 
-    @PutMapping
+    @GetMapping("/admin")
+    ResponseEntity<List<BookResponseDto>> getAllBooks(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) List<String> genre) {
+        return ResponseEntity.ok().body(bookService.getAllBooks());
+    }
+
+    @PutMapping("/admin")
     BookResponseDto updateBook(@RequestBody BookRequestWithIdDto bookRequestWithIdDto) {
         return bookService.updateBook(bookRequestWithIdDto);
     }
-    @DeleteMapping
-    BookResponseDto deleteBook(@RequestBody Book book) {
-        return bookService.deleteBook(book);
+    @DeleteMapping("/admin/{bookId}")
+    ResponseEntity<ResponseDto> deleteBook(@PathVariable int bookId) {
+        return bookService.deleteBook(bookId);
     }
 }

@@ -19,12 +19,11 @@ public class Customer {
     @Column(name = "customer_id")
     private int customerId;
 
+//    @JoinColumn(name = "customer_id")
     @OneToOne
     @MapsId
     @JoinColumn(name = "customer_id")
-    private Account mAccount;
-
-
+    private Account account;
 
     @Column(name = "name", length = 255)
     private String name;
@@ -42,10 +41,10 @@ public class Customer {
     List<Cart> cart;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    List<Cart> comment;
+    List<Comment> comment;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    List<Cart> favourite;
+    List<Favourite> favourite;
 
     @OneToMany(mappedBy = "customer")
     List<Order> order;

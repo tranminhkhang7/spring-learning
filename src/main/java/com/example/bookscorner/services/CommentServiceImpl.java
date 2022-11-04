@@ -13,6 +13,7 @@ import com.example.bookscorner.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     public CommentResponseDto addComment(CommentRequestDto commentRequestDto) {
+        System.out.println(commentRequestDto.getContent() + commentRequestDto.getCustomerId());
         int customerId = commentRequestDto.getCustomerId();
         int bookId = commentRequestDto.getBookId();
         if (customerRepository.findCustomerByCustomerId(customerId) == null) {
@@ -50,9 +52,9 @@ public class CommentServiceImpl implements CommentService{
         if (bookRepository.findBookByBookId(bookId) == null) {
             throw new NotFoundException("This book does not exist.");
         }
-        if (commentRepository.findCommentByCustomer_CustomerIdAndBook_BookId(customerId, bookId) != null) {
-            throw new NotFoundException("This customer have commented this book.");
-        }
+//        if (commentRepository.findCommentByCustomer_CustomerIdAndBook_BookId(customerId, bookId) != null) {
+//            throw new NotFoundException("This customer have commented this book.");
+//        }
 
         Comment comment = entityAndRequestDtoMapper.mapToEntity(commentRequestDto);
 
@@ -63,12 +65,13 @@ public class CommentServiceImpl implements CommentService{
         return commentResponseDto;
     }
 
+//    @Transactional
     public List<CommentResponseDto> getCommentsOfABook(int bookId) {
         if (bookRepository.findBookByBookId(bookId) == null) {
             throw new NotFoundException("This book does not exist.");
         }
 
-        List<Comment> commentList = commentRepository.findCommentsByBook_BookId(bookId);
+        List<Comment> commentList = commentRepository.findAllByBook_BookId(bookId);
 
         List<CommentResponseDto> commentResponseDtoList =
                 entityAndResponseDtoMapper.mapToListDto(commentList);

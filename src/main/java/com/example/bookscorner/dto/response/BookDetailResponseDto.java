@@ -21,5 +21,5 @@ public class BookDetailResponseDto {
     private String imageLink;
     private String description;
     private int quantityLeft;
-    private List<Comment> bookComments;
+//    private List<Comment> bookComments;
 }

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByEmail(String email);
-
+    boolean existsByEmail(String email);
     List<Account> findAll();
 }
