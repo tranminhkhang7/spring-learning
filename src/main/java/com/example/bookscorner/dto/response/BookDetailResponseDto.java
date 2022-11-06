@@ -1,6 +1,7 @@
 package com.example.bookscorner.dto.response;
 
 import com.example.bookscorner.entities.Comment;
+import com.example.bookscorner.entities.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,7 @@ public class BookDetailResponseDto {
     private String imageLink;
     private String description;
     private int quantityLeft;
+    private int averageRating;
+    private List<GenreResponseDto> genreList;
 //    private List<Comment> bookComments;
 }

@@ -4,13 +4,16 @@ import com.example.bookscorner.dto.request.BookRequestDto;
 import com.example.bookscorner.dto.request.BookRequestWithIdDto;
 import com.example.bookscorner.dto.response.BookDetailResponseDto;
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.GenreResponseDto;
 import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.BookGenre;
+import com.example.bookscorner.entities.Comment;
 import com.example.bookscorner.entities.Genre;
 import com.example.bookscorner.exceptions.NotFoundException;
 import com.example.bookscorner.mappers.BookEntityAndBookDetailResponseDtoMapper;
 import com.example.bookscorner.mappers.BookEntityAndBookResponseDtoMapper;
+import com.example.bookscorner.mappers.GenreEntityAndGenreResponseDtoMapper;
 import com.example.bookscorner.mappers.ObjectMapperUtils;
 import com.example.bookscorner.repositories.BookGenreRepository;
 import com.example.bookscorner.repositories.BookRepository;
@@ -45,6 +48,9 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookEntityAndBookResponseDtoMapper bookEntityAndBookResponseDtoMapper;
+
+    @Autowired
+    private GenreEntityAndGenreResponseDtoMapper genreEntityAndGenreResponseDtoMapper;
 
     @Autowired
     private BookEntityAndBookDetailResponseDtoMapper bookDetailResponseMapper;
@@ -91,7 +97,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookResponseDto> getAllBooks() {
-        List<Book> listBooks = bookRepository.findAll();
+        List<Book> listBooks = bookRepository.findAllByOrderByBookIdAsc();
 
         List<BookResponseDto> bookResponseDtoList =
                 bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
@@ -109,7 +115,28 @@ public class BookServiceImpl implements BookService {
 
         Book book = bookRepository.findBookByBookId(bookId);
 
+        List<Comment> commentList = book.getBookComments();
+//        System.out.println(commentList);
+        float sum = 0;
+        for (Comment comment: commentList) {
+            sum += comment.getRating();
+        }
+        int average = Math.round(sum / commentList.size());
+
+        List<BookGenre> bookGenreList = bookGenreRepository.findAllByBook_BookId(bookId);
+
+        List<GenreResponseDto> genreResponseDtoList = new ArrayList<>();
+        if (bookGenreList != null && !bookGenreList.isEmpty()) {
+            for (BookGenre bookGenre: bookGenreList) {
+                Genre genre = genreRepository.findGenreByGenreId(bookGenre.getGenre().getGenreId());
+                GenreResponseDto genreResponseDto = genreEntityAndGenreResponseDtoMapper.mapToDto(genre);
+                genreResponseDtoList.add((genreResponseDto));
+            }
+        }
+
         BookDetailResponseDto bookDetailResponseDto = bookDetailResponseMapper.mapToDetailResponseDto(book);
+        bookDetailResponseDto.setAverageRating(average);
+        bookDetailResponseDto.setGenreList(genreResponseDtoList);
 
         return bookDetailResponseDto;
     }
@@ -178,7 +205,12 @@ public class BookServiceImpl implements BookService {
 
         Book bookOld = bookRepository.findById(bookId).get();
 
-        bookOld.setStatus("disabled");
+        if (bookOld.getStatus().trim().equals("active")) {
+            bookOld.setStatus("disabled");
+        } else {
+            bookOld.setStatus("active");
+        }
+
 
         bookRepository.save(bookOld);
 

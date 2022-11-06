@@ -13,4 +13,5 @@ public class BookResponseDto {
     private double price;
     private String imageLink;
     private int quantityLeft;
+    private String status;
 }

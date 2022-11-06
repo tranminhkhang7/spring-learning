@@ -22,6 +22,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "AND b.status = ?3")
     public List<Book> searchBooks(String query, List<Integer> genre, String status);
     public Book findBookByBookId(int bookId);
-    public List<Book> findAll();
+    public List<Book> findAllByOrderByBookIdAsc();
     public List<Book> findAllByStatus(String status);
 }

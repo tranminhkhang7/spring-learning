@@ -34,8 +34,6 @@ public class Genre {
     @OneToMany(mappedBy = "genre")
     private List<BookGenre> bookGenres;
 
-
-
     public Genre(String genreName) {
         this.genreName = genreName;
     }

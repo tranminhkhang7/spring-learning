@@ -1,6 +1,7 @@
 package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.GenreResponseDto;
 import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface GenreService {
-    public List<Genre> getGenres();
+    public List<GenreResponseDto> getGenres();
     public Genre addNewGenre(Genre genre);
     public ResponseEntity<ResponseDto> deleteGenre(int genreId);
     public Genre updateGenre(int genreId, Genre genre);

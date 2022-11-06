@@ -1,6 +1,7 @@
 package com.example.bookscorner.controllers;
 
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.GenreResponseDto;
 import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
@@ -22,7 +23,7 @@ public class GenreController {
     }
 
     @GetMapping
-    List<Genre> getGenre() {
+    List<GenreResponseDto> getGenre() {
         return genreService.getGenres();
     }
 

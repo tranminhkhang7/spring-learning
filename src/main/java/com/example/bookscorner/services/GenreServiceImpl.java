@@ -1,9 +1,11 @@
 package com.example.bookscorner.services;
 
 import com.example.bookscorner.dto.response.BookResponseDto;
+import com.example.bookscorner.dto.response.GenreResponseDto;
 import com.example.bookscorner.dto.response.ResponseDto;
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
+import com.example.bookscorner.mappers.GenreEntityAndGenreResponseDtoMapper;
 import com.example.bookscorner.repositories.GenreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,21 @@ public class GenreServiceImpl implements GenreService{
     private final GenreRepository genreRepository;
     @Autowired
     private final ModelMapper mapper;
+
+    @Autowired
+    private final GenreEntityAndGenreResponseDtoMapper genreEntityAndGenreResponseDtoMapper;
 //    @Autowired
-    public GenreServiceImpl(GenreRepository genreRepository, ModelMapper mapper) {
+    public GenreServiceImpl(GenreRepository genreRepository, ModelMapper mapper, GenreEntityAndGenreResponseDtoMapper genreEntityAndGenreResponseDtoMapper) {
         super();
         this.genreRepository = genreRepository;
         this.mapper = mapper;
+        this.genreEntityAndGenreResponseDtoMapper = genreEntityAndGenreResponseDtoMapper;
     }
 
-    public List<Genre> getGenres() {
-        return genreRepository.findAll();
+    public List<GenreResponseDto> getGenres() {
+        List<Genre> genreList = genreRepository.findAll();
+        List<GenreResponseDto> genreResponseDtoList = genreEntityAndGenreResponseDtoMapper.mapToDto(genreList);
+        return genreResponseDtoList;
     }
 
     public Genre addNewGenre(Genre genre) {

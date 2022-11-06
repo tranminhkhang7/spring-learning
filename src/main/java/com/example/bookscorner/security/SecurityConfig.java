@@ -55,6 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Add books
         http.authorizeRequests().antMatchers(POST,"/book/admin").hasAuthority("ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
+        //Get books with status
+        http.authorizeRequests().antMatchers(GET,"/book/admin").hasAuthority("ADMIN");
+
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
