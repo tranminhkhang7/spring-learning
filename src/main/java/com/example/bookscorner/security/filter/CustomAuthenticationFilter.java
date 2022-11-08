@@ -62,10 +62,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURI().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-//        Customer customer = customerRepository.findCustomerByMAccount_Email(user.getUsername());
-//        String customerName = customer.getName();
-
-
 //        String refresh_token = JWT.create()
 //                .withSubject(user.getUsername())
 //                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
@@ -74,6 +70,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 //        String refresh_token = jwtUtil.generateToken(user, refreshTokenExpiration);
         Customer customer = customerRepository.findByAccount_Email(user.getUsername());
+
+        if (!customer.getStatus().equals("active")) return;
 
         response.setHeader("access_token", access_token);
         response.setHeader("user_name", customer.getName());

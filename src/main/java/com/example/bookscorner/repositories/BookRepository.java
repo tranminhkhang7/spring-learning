@@ -1,9 +1,9 @@
 package com.example.bookscorner.repositories;
 
 import com.example.bookscorner.entities.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "AND b.status = ?3")
     public List<Book> searchBooks(String query, List<Integer> genre, String status);
     public Book findBookByBookId(int bookId);
-    public List<Book> findAllByOrderByBookIdAsc();
+    public List<Book> findAllByOrderByBookIdAsc(Pageable pageable);
     public List<Book> findAllByStatus(String status);
+    public int countAllByBookIdGreaterThan(int bookId);
 }

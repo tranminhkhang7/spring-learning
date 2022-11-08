@@ -38,4 +38,11 @@ public class OrderDetail {
 
     @Column(name = "price")
     private double price;
+
+    public OrderDetail(Order order, Book book, int quantity, double price) {
+        this.order = order;
+        this.book = book;
+        this.quantity = quantity;
+        this.price = price;
+    }
 }

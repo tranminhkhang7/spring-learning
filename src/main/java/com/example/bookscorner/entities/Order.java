@@ -49,3 +49,31 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetail;
 }
+
+
+//[
+//        {
+//        "bookId":5,
+//        "title":"Educated",
+//        "imageLink":"https://firebasestorage.googleapis.com/v0/b/spring-react-learning.appspot.com/o/img2.jpeg?alt=media&token=83f0f704-606a-4ccd-be5c-02f3e063917d",
+//        "price":0,
+//        "quantity":2,
+//        "id":1
+//        },
+//        {
+//        "id":2,
+//        "bookId":4,
+//        "price":0,
+//        "imageLink":"https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595674533l/23692271._SY475_.jpg",
+//        "title":null,
+//        "quantity":2
+//        },
+//        {
+//        "bookId":10,
+//        "title":"A Promised Land",
+//        "imageLink":"https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600357110l/55361205._SY475_.jpg",
+//        "price":35.65,
+//        "quantity":1,
+//        "id":3
+//        }
+//        ]

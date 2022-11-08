@@ -23,8 +23,10 @@ public class GenreController {
     }
 
     @GetMapping
-    List<GenreResponseDto> getGenre() {
-        return genreService.getGenres();
+    List<GenreResponseDto> getGenre(
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "8") Integer size) {
+        return genreService.getGenres(page, size);
     }
 
     @GetMapping("/{genreId}")
@@ -32,7 +34,7 @@ public class GenreController {
         return genreService.getAllBooksByGenre(genreId);
     }
 
-    @PostMapping // phải return object json. ĐÃ SỬA
+    @PostMapping ("/admin")// phải return object json. ĐÃ SỬA
     Genre addNewGenre(@RequestBody Genre genre) {
         return genreService.addNewGenre(genre);
     }
@@ -42,7 +44,7 @@ public class GenreController {
         return genreService.updateGenre(genreId, genre);
     }
  
-    @DeleteMapping(path = "{genreId}") // phải return object json, chứa message. ĐÃ SỬA
+    @DeleteMapping(path = "/admin/{genreId}") // phải return object json, chứa message. ĐÃ SỬA
     ResponseEntity<ResponseDto> deleteGenre(@PathVariable("genreId") int genreId){
         return genreService.deleteGenre(genreId);
     }

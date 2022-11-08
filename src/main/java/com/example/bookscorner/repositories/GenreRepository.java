@@ -2,6 +2,7 @@ package com.example.bookscorner.repositories;
 
 import com.example.bookscorner.entities.Book;
 import com.example.bookscorner.entities.Genre;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,6 @@ public interface GenreRepository extends JpaRepository<Genre, Integer> {
 
     @Query ("SELECT b FROM Book b JOIN BookGenre bg ON b.bookId = bg.book.bookId WHERE bg.genre.genreId = :genreId")
     List<Book> getAllBooksByGenre (@Param("genreId") int genreId);
-
-    Genre findGenreByGenreId(int genreId);
+    public Genre findGenreByGenreId(int genreId);
+    public List<Genre> findAllByOrderByGenreId(Pageable pageable);
 }

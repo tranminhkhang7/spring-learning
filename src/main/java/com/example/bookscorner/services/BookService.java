@@ -12,9 +12,10 @@ import java.util.List;
 
 public interface BookService {
     public List<BookResponseDto> getBooksWithActiveStatus(String query, List<String> genre);
-    public List<BookResponseDto> getAllBooks();
+    public List<BookResponseDto> getAllBooks(int page, int size);
     public BookDetailResponseDto getBook(int bookId);
     public BookResponseDto addNewBook(BookRequestDto bookRequestDto);
     public BookResponseDto updateBook(BookRequestWithIdDto bookRequestWithIdDto);
     public ResponseEntity<ResponseDto> deleteBook(int bookId);
+    public int countAllBooks();
 }

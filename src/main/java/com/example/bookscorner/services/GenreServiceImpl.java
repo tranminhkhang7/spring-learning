@@ -9,6 +9,8 @@ import com.example.bookscorner.mappers.GenreEntityAndGenreResponseDtoMapper;
 import com.example.bookscorner.repositories.GenreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,8 +36,9 @@ public class GenreServiceImpl implements GenreService{
         this.genreEntityAndGenreResponseDtoMapper = genreEntityAndGenreResponseDtoMapper;
     }
 
-    public List<GenreResponseDto> getGenres() {
-        List<Genre> genreList = genreRepository.findAll();
+    public List<GenreResponseDto> getGenres(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Genre> genreList = genreRepository.findAllByOrderByGenreId(pageable);
         List<GenreResponseDto> genreResponseDtoList = genreEntityAndGenreResponseDtoMapper.mapToDto(genreList);
         return genreResponseDtoList;
     }

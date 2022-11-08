@@ -2,6 +2,7 @@ package com.example.bookscorner.dto.response;
 
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,4 +15,5 @@ public class BookResponseDto {
     private String imageLink;
     private int quantityLeft;
     private String status;
+
 }

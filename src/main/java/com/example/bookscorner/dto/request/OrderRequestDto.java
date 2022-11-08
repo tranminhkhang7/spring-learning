@@ -21,5 +21,5 @@ public class OrderRequestDto {
     private String address;
     private double totalAmount;
     private int customerId;
-
+    private List<OrderDetailRequestDto> orderDetail;
 }

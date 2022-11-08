@@ -27,10 +27,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Autowired
+    @Autowired
     private final UserDetailsService userDetailsService;
+//    @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    @Autowired
     private final CustomerRepository customerRepository;
 
     @Override
@@ -53,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Get carts
 //        http.authorizeRequests().antMatchers(GET,"/checkout/**").hasAnyAuthority("CUSTOMER");
         //Add books
-        http.authorizeRequests().antMatchers(POST,"/book/admin").hasAuthority("ADMIN");
+//        http.authorizeRequests().antMatchers(POST,"/book/admin").hasAuthority("ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
         //Get books with status
-        http.authorizeRequests().antMatchers(GET,"/book/admin").hasAuthority("ADMIN");
+//        http.authorizeRequests().antMatchers(GET,"/book/admin").hasAuthority("ADMIN");
 
 
         http.addFilter(customAuthenticationFilter);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface GenreService {
-    public List<GenreResponseDto> getGenres();
+    public List<GenreResponseDto> getGenres(int page, int size);
     public Genre addNewGenre(Genre genre);
     public ResponseEntity<ResponseDto> deleteGenre(int genreId);
     public Genre updateGenre(int genreId, Genre genre);

@@ -21,6 +21,8 @@ import com.example.bookscorner.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -96,8 +98,9 @@ public class BookServiceImpl implements BookService {
         return bookResponseDtoList;
     }
 
-    public List<BookResponseDto> getAllBooks() {
-        List<Book> listBooks = bookRepository.findAllByOrderByBookIdAsc();
+    public List<BookResponseDto> getAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Book> listBooks = bookRepository.findAllByOrderByBookIdAsc(pageable);
 
         List<BookResponseDto> bookResponseDtoList =
                 bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
@@ -218,28 +221,8 @@ public class BookServiceImpl implements BookService {
 
     }
 
-//    public List<BookResponseDto> searchBooks(String query, List<String> genre) {
-//        if (genre == null || query == null) return null;
-//        List<Integer> newList = new ArrayList<>();
-//        for(String s : genre) {
-//            try {
-//                newList.add(Integer.valueOf(s));
-//            } catch (NumberFormatException e){
-//                System.out.println(e + " Parse a alphabet string to a number gets error.");
-//            }
-//        }
-//
-//        List<Book> listBooks = bookRepository.searchBooks(query, newList);
-//
-//        List<BookResponseDto> listBooksDto = new ArrayList<>();
-//
-//        for (Book bookEntity: listBooks) {
-//            BookResponseDto bookResponseDto = mapper.map(bookEntity, BookResponseDto.class);
-//            listBooksDto.add(bookResponseDto);
-//        }
-//
-//        System.out.println(listBooksDto);
-//
-//        return listBooksDto;
-//    }
+    public int countAllBooks() {
+        return bookRepository.countAllByBookIdGreaterThan(-1);
+    }
+
 }

@@ -31,38 +31,40 @@ public class BookController {
         return ResponseEntity.ok().body(bookService.getBooksWithActiveStatus(query, genre));
     }
 
-
-//    @GetMapping // gom lại với api trên. ĐÃ SỬA
-//    List<BookResponseDto> searchBooks(
-//            @RequestParam(required = false) String query,
-//            @RequestParam(required = false) List<String> genre
-//    ) {
-//        return bookService.searchBooks(query, genre);
-//    }
-
     @GetMapping("/{bookId}")
     BookDetailResponseDto getBook(@PathVariable int bookId) {
         return bookService.getBook(bookId);
     }
 
-    @PostMapping("/admin")
+    @GetMapping("/totalnumber")
+    int countAllBooks() {
+        return bookService.countAllBooks();
+    }
+
+    //Admin
+    @PostMapping
     BookResponseDto addNewBook(@RequestBody BookRequestDto bookRequestDto) {
         return bookService.addNewBook(bookRequestDto);
     }
 
-    @GetMapping("/admin")
+    //Admin
+    @GetMapping("/allbooks")
     ResponseEntity<List<BookResponseDto>> getAllBooks(
-            @RequestParam(required = false) String query,
-            @RequestParam(required = false) List<String> genre) {
-        return ResponseEntity.ok().body(bookService.getAllBooks());
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "8") Integer size) {
+        return ResponseEntity.ok().body(bookService.getAllBooks(page, size));
     }
 
-    @PutMapping("/admin")
+    //Admin
+    @PutMapping
     BookResponseDto updateBook(@RequestBody BookRequestWithIdDto bookRequestWithIdDto) {
         return bookService.updateBook(bookRequestWithIdDto);
     }
-    @DeleteMapping("/admin/{bookId}")
+    //Admin
+    @DeleteMapping("/{bookId}")
     ResponseEntity<ResponseDto> deleteBook(@PathVariable int bookId) {
         return bookService.deleteBook(bookId);
     }
+
+
 }
