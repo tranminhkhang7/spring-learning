@@ -19,7 +19,7 @@ public class OrderRequestDto {
     private Timestamp timestamp;
     private String phone;
     private String address;
-    private double totalAmount;
+//    private double totalAmount;
     private int customerId;
     private List<OrderDetailRequestDto> orderDetail;
 }

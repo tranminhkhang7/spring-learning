@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService{
 
         orderRepository.save(order);
 
+        double totalAmount = 0;
         for (OrderDetailRequestDto orderDetailRequestDto: orderRequestDto.getOrderDetail()) {
             int bookId = orderDetailRequestDto.getBookId();
             Book book = bookRepository.findBookByBookId(bookId);
@@ -54,7 +55,12 @@ public class OrderServiceImpl implements OrderService{
 
             book.setQuantityLeft(book.getQuantityLeft() - quantity);
             bookRepository.save(book);
+
+            totalAmount += (quantity * price);
         }
+        order.setTotalAmount(totalAmount);
+        order.setStatus("pending");
+        orderRepository.save(order);
 
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderEntityAndOrderResponseDtoMapper.map(order, orderResponseDto);

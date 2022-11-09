@@ -84,15 +84,21 @@ public class BookServiceImpl implements BookService {
         //Query and genre list are not null
 
         List<Integer> newList = new ArrayList<>();
-        for(String s : genre) {
-            try {
-                newList.add(Integer.valueOf(s));
-            } catch (NumberFormatException e){
-                System.out.println(e + " Parse a alphabet string to a number gets error.");
+        List<Book> listBooks = new ArrayList<>();
+        if (genre != null) {
+            for (String s : genre) {
+                try {
+                    newList.add(Integer.valueOf(s));
+                } catch (NumberFormatException e) {
+                    System.out.println(e + " Parse a alphabet string to a number gets error.");
+                }
             }
+            listBooks = bookRepository.searchBooks(query, newList, "active");
+        } else {
+            listBooks = bookRepository.searchBooks(query, "active");
         }
 
-        List<Book> listBooks = bookRepository.searchBooks(query, newList, "active");
+//        List<Book> listBooks = bookRepository.searchBooks(query, newList, "active");
         List<BookResponseDto> bookResponseDtoList =
                 bookEntityAndBookResponseDtoMapper.mapToResponseDto(listBooks);
         return bookResponseDtoList;
